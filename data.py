@@ -1,27 +1,44 @@
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
-transform = transforms.Compose([
-    # before — wrong, single channel broadcast
-    transforms.Normalize((0.5,), (0.5,)),
+transform_train = transforms.Compose([
+    transforms.RandomHorizontalFlip(),
+    transforms.RandomCrop(32, padding=4),
+    transforms.Resize(224),
+    transforms.ToTensor(),
+    transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+])
 
-    # after — correct CIFAR-10 RGB mean and std
+transform_test = transforms.Compose([
+    transforms.Resize(224),
+    transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
 ])
 
 trainset = datasets.CIFAR10(
-    root="./data",
-    train=True,
-    download=False,
-    transform=transform
-)
-
+                            root="./data",
+                            train=True, 
+                            download=True, 
+                            transform=transform_train
+                            )
 testset = datasets.CIFAR10(
-    root="./data",
-    train=False,
-    download=False,
-    transform=transform
-)
+                            root="./data", 
+                            train=False, 
+                            download=False, 
+                            transform=transform_test
+                            )
 
-trainloader = DataLoader(trainset, batch_size=64, shuffle=True)
-testloader = DataLoader(testset, batch_size=64, shuffle=False)
+trainloader = DataLoader(
+                        trainset, 
+                        batch_size=64, 
+                        shuffle=True, 
+                        num_workers=4, 
+                        pin_memory=True
+                        )
+testloader = DataLoader(
+                        testset, 
+                        batch_size=64, 
+                        shuffle=False, 
+                        num_workers=4, 
+                        pin_memory=True
+                        )

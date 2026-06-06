@@ -1,0 +1,20 @@
+# Python virtual environments
+.env/
+.env*/
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Datasets
+data/
+
+# Model checkpoints
+*.pth
+*.pt
+*.ckpt
+
+# Jupyter
+.ipynb_checkpoints/

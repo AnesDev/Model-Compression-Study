@@ -3,16 +3,16 @@ import time
 import os
 from evaluate import evaluate
 from data import testloader
-from CNN import CNN
+from ptq.cnn import MobileNet
 
 
 def run_fp16():
-    model = CNN()
-    model.load_state_dict(torch.load("fp32.pth", map_location="cpu"))
+    model = MobileNet()
+    model.load_state_dict(torch.load("ptq/fp32.pth", map_location="cpu"))
     model = model.half()
     model.eval()
 
-    torch.save(model.state_dict(), "fp16.pth")
+    torch.save(model.state_dict(), "ptq/fp16.pth")
 
     accuracy = evaluate(model, testloader, half=True)
 
@@ -23,6 +23,6 @@ def run_fp16():
             model(x)
     inference_time = time.time() - start
 
-    size = os.path.getsize("fp16.pth") / 1024
+    size = os.path.getsize("ptq/fp16.pth") / 1024
 
     return accuracy, inference_time, size

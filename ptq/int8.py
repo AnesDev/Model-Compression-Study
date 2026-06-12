@@ -4,12 +4,12 @@ import time
 import os
 from evaluate import evaluate
 from data import trainloader, testloader
-from CNN import CNN
+from ptq.cnn import MobileNet
 
 
 def run_int8():
-    model = CNN()
-    model.load_state_dict(torch.load("fp32.pth", map_location="cpu"))
+    model = MobileNet()
+    model.load_state_dict(torch.load("ptq/fp32.pth", map_location="cpu"))
     model.eval()
 
     torch.backends.quantized.engine = 'fbgemm'
@@ -25,7 +25,7 @@ def run_int8():
             break
 
     tq.convert(model.model, inplace=True)
-    torch.save(model.state_dict(), "int8.pth")
+    torch.save(model.state_dict(), "ptq/int8.pth")
 
     accuracy = evaluate(model, testloader)
 
@@ -36,6 +36,6 @@ def run_int8():
             model(x)
     inference_time = time.time() - start
 
-    size = os.path.getsize("int8.pth") / 1024
+    size = os.path.getsize("ptq/int8.pth") / 1024
 
     return accuracy, inference_time, size

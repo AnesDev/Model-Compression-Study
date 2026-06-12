@@ -1,10 +1,10 @@
 import torch
 import torch.nn as nn
 
-from CNN import CNN
-from fp32 import run_fp32
-from fp16 import run_fp16
-from int8 import run_int8
+from ptq.cnn import MobileNet
+from ptq.fp32 import run_fp32
+from ptq.fp16 import run_fp16
+from ptq.int8 import run_int8
 
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

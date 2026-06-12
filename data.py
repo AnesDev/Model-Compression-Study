@@ -32,13 +32,13 @@ trainloader = DataLoader(
                         trainset, 
                         batch_size=64, 
                         shuffle=True, 
-                        num_workers=4, 
-                        pin_memory=True
+                        # num_workers=4, 
+                        # pin_memory=True
                         )
 testloader = DataLoader(
                         testset, 
                         batch_size=64, 
                         shuffle=False, 
-                        num_workers=4, 
-                        pin_memory=True
+                        # num_workers=4, 
+                        # pin_memory=True
                         )

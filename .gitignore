@@ -18,3 +18,7 @@ data/
 
 # Jupyter
 .ipynb_checkpoints/
+notebook.ipynb
+test.py
+
+.gitignore

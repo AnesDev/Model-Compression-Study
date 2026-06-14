@@ -31,8 +31,3 @@ def fake_quantise(tensor, bits, symmetric=False):
 def fake_quantise_ste(tensor, bits, symmetric=False):
     q = fake_quantise(tensor, bits, symmetric)
     return tensor + (q - tensor).detach()
-
-x = torch.tensor([0.3, 0.7], requires_grad=True)
-y = fake_quantise_ste(x, 4)
-y.sum().backward()
-print(x.grad)  # expect [1., 1.]

@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.ao.quantization as tq
 import os
 
 from data import trainloader, valloader, testloader
@@ -10,14 +9,6 @@ from cnn import CNN
 NUM_EPOCHS = 40
 
 model = CNN()
-model.eval()
-model.fuse_model()
-
-torch.backends.quantized.engine = 'fbgemm'
-model.qconfig = tq.get_default_qat_qconfig('fbgemm')
-
-model.train()
-tq.prepare_qat(model, inplace=True)
 
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
@@ -51,11 +42,9 @@ for epoch in range(NUM_EPOCHS):
         f"val_acc={val_acc:.4f}"
     )
 
-tq.convert(model.eval(), inplace=True)
-
-save_path = os.path.join(os.path.dirname(__file__), "qat8_cnn.pth")
+save_path = os.path.join(os.path.dirname(__file__), "fp32_cnn.pth")
 torch.save(model.state_dict(), save_path)
 print(f"Model saved to {save_path}")
 
 test_acc = evaluate(model, testloader)
-print(f"QAT8 Test Accuracy: {test_acc:.4f}")
+print(f"FP32 Test Accuracy: {test_acc:.4f}")
